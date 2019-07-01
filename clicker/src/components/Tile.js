@@ -10,17 +10,15 @@ class Tile extends React.Component {
 
     //function that handles correct guess
     handleCorrectGuess = () => {
+        this.setState({ clicked: true });
         this.props.handleChangeMessage("Great!");
         this.props.handleIncreaseScore();
-        this.setState({ clicked: true });
-        this.props.randomizeImageOrder();
     }
 
     //function that handles incorrect guess
     handleIncorrectGuess = () => {
         alert("Game Over!");
         this.props.handleResetGame();
-        this.props.randomizeImageOrder()
     }
 
     render() {

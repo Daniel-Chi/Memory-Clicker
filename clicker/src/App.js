@@ -15,25 +15,33 @@ class App extends React.Component {
     score: 0,
     highScore: 0,
     message: "Click a Kirby to begin!",
-    imageUrls: []
+    images: []
   };
 
-  //initialize imageUrls array on mount
+  //initialize images in array as objects with url and boolean for whether clicked
   componentDidMount() {
-    this.randomizeImageOrder();
+    this.setState({
+      images: imageUrlArray.map(item => {
+        return {
+          url: item,
+          clicked: false
+        }
+      })
+    });
+    this.setState(prevState => {
+      return { images: this.shuffleArray(prevState.images) }
+    });
   };
 
-  //function to shuffle images in array
-  randomizeImageOrder = () => {
-    let randomArray = [];
-    //loop through and randomly insert 12 image urls
-    for (let i = 0; i < 12; i++) {
-      //choose a random place to insert each image url
-      const randomIndex = Math.floor(Math.random() * randomArray.length);
-      //insert URL into the array
-      randomArray.splice(randomIndex, 0, imageUrlArray[i]);
+  //function to shuffle images in array (mutates array)
+  shuffleArray = (arr) => {
+    for (let i = 0; i < arr.length; i++) {
+      //choose a random place to swap each item
+      const randomIndex = Math.floor(Math.random() * arr.length);
+      //swap each item with another random item (or itself)
+      [arr[i], arr[randomIndex]] = [arr[randomIndex], arr[i]]
     };
-    this.setState({ imageUrls: randomArray });
+    return arr;
   }
 
   //function to increase score
@@ -42,17 +50,33 @@ class App extends React.Component {
     //by attempting to increase score before previous setState is completed
     this.setState(prevState => {
       //compare new score with high score
-      if (prevState.score + 1 > this.state.highScore) {
-        return {
-          score: (prevState.score + 1),
-          highScore: (prevState.score + 1)
-        };
+      if (prevState.score + 1 > prevState.highScore) {
+        //also check for complete victory
+        if (prevState.score + 1 === prevState.images.length) {
+          alert("Wow! Perfect!");
+          this.handleChangeMessage("Click a Kirby to play again!");
+          return {
+            //reset score
+            score: 0,
+            //reset clicked values to false
+            images: this.resetClickedToFalse(this.state.images)
+          }
+          //regular score increase if not complete victory yet
+        } else {
+          return {
+            score: (prevState.score + 1),
+            highScore: (prevState.score + 1)
+          };
+        }
       } else {
         //don't change high score if new score isn't greater
         return {
           score: (prevState.score + 1)
         };
       }
+    });
+    this.setState(prevState => {
+      return { images: this.shuffleArray(prevState.images) }
     });
   }
 
@@ -64,7 +88,27 @@ class App extends React.Component {
   //function to reset game on win or loss
   handleResetGame = () => {
     this.handleChangeMessage("Click a Kirby to start again!");
-    this.setState({ score: 0 });
+    //reset score and clicked values
+    this.setState({
+      score: 0,
+      //reset all click values to false
+      images: this.resetClickedToFalse(this.state.images)
+      //shuffle all images
+    });
+    this.setState(prevState => {
+      return { images: this.shuffleArray(prevState.images) }
+    });
+  }
+
+  //function to return array with reset clicked property of objects
+  resetClickedToFalse = (arr) => {
+    arr.map(
+      item => {
+        const resetItem = Object.assign({}, item);
+        resetItem.clicked = false;
+        return resetItem;
+      }
+    )
   }
 
   //render all components wrapped in a single div
@@ -72,10 +116,10 @@ class App extends React.Component {
     //pass score and score handler to components that need it
     return (
       <div>
-        <TopBar 
-        score={this.state.score} 
-        highScore={this.state.highScore}
-        message={this.state.message}
+        <TopBar
+          score={this.state.score}
+          highScore={this.state.highScore}
+          message={this.state.message}
         />
         <Header />
         <br></br>
@@ -83,14 +127,14 @@ class App extends React.Component {
         <GameContainer>
           {//render all image tiles by mapping through Urls array in state
             //pass into GameContainer component as children
-            this.state.imageUrls.map((item) => (
+            this.state.images.map((item) => (
               <Tile
-                key={item}
-                url={item}
+                key={item.url}
+                url={item.url}
                 handleChangeMessage={this.handleChangeMessage}
                 handleIncreaseScore={this.handleIncreaseScore}
                 handleResetGame={this.handleResetGame}
-                randomizeImageOrder={this.randomizeImageOrder}
+                shuffleArray={this.shuffleArray}
               />
             ))}
         </GameContainer>
