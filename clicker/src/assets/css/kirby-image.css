@@ -1,0 +1,10 @@
+.kirby-image {
+    width: 12rem;
+    margin: 2rem;
+    border: 6px;
+    border-color: crimson;
+    border-style: solid
+}
+.kirby-image:hover {
+    border-color: lightcoral
+}

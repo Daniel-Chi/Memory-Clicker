@@ -1,19 +1,16 @@
 import React from "react";
+import "../assets/css/navbar.css";
 
 function TopBar(props) {
     return (
         <nav className="navbar">
-            <ul>
-                <li>
-                    <a className="navbar-brand" href="/">Clicker Game</a>
-                </li>
-                <li>
-                    {props.children}
-                </li>
-                <li>
-                    {"Score: "}{props.score}{" | Top Score: "}{props.highScore}
-                </li>
-            </ul>
+            <a className="nav-item" href="/">Clicker Game</a>
+            <span className="nav-item">
+                {props.message}
+            </span>
+            <span className="nav-item">
+                {"Score: "}{props.score}{" | Top Score: "}{props.highScore}
+            </span>
         </nav>
     )
 }

@@ -1,10 +1,13 @@
 import React from "react";
+import "../assets/css/game-intro.css"
 
-function Header () {
+function Header() {
     return (
-        <header className="header">
-            <h1>Kirby Memory Clicker Game!</h1>
-            <h2>Click a Kirby to earn a point, but if you click one twice it's Game Over!</h2>
+        <header className="jumbotron jumbotron-fluid game-intro">
+            <div className="container">
+                <h1 className="display-4">Kirby Memory Clicker Game!</h1>
+                <p className="lead">Click a Kirby to earn a point, but if you click one twice it's Game Over!</p>
+            </div>
         </header>
     )
 }

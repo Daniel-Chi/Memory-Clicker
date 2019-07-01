@@ -1,0 +1,7 @@
+.game-intro {
+    background-image: url("https://orig00.deviantart.net/b4ed/f/2018/309/9/4/sleepy_sea_by_star_abraham-dcraqkq.png");
+    background-size: cover;
+    background-position-y: center;
+    position: relative;
+    top: 3.25rem;
+}
