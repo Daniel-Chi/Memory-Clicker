@@ -8,40 +8,47 @@ class Tile extends React.Component {
         clicked: false
     }
 
-    handleGuessOnClick(e) {
-        e.preventDefault()
-        //if guess is correct, i.e. not clicked
-        if (!this) {
-            this.handleCorrectGuess();
-            //if guess is incorrect, already clicked
-        } else {
-            this.handleIncorrectGuess();
-        }
+    //function that handles correct guess
+    handleCorrectGuess = () => {
+        this.props.handleChangeMessage("Great!");
+        this.props.handleIncreaseScore();
+        this.setState({ clicked: true });
+        this.props.randomizeImageOrder();
     }
 
-    handleCorrectGuess() {
-        this.props.handleChangeMessage("Great!")
-            .then(this.props.handleIncreaseScore())
-            .then(this.setState({ clicked: true }))
-    }
-
-    handleIncorrectGuess() {
-        this.props.handleChangeMessage("Game Over!")
-            .then(this.props.handleResetGame())
+    //function that handles incorrect guess
+    handleIncorrectGuess = () => {
+        alert("Game Over!");
+        this.props.handleResetGame();
+        this.props.randomizeImageOrder()
     }
 
     render() {
-        return (
-            <div className="col-lg-3 col-md-4">
-                <a href="/" onClick={this.handleGuessOnClick}>
-                    <img
-                        alt="Kirby"
-                        src={this.props.url}
-                        className="kirby-image"
-                    />
-                </a>
-            </div>
-        )
+        //check for incorrect answer, already clicked
+        if (this.state.clicked) {
+            return (
+                <div className="col-lg-3 col-md-4">
+                        <img
+                            src={this.props.url}
+                            alt="Kirby"
+                            className="kirby-image"
+                            onClick={this.handleIncorrectGuess}
+                        />
+                </div>
+            )
+        //check for correct answer, not yet clicked
+        } else {
+            return (
+                <div className="col-lg-3 col-md-4">
+                        <img
+                            src={this.props.url}
+                            alt="Kirby"
+                            className="kirby-image"
+                            onClick={this.handleCorrectGuess}
+                        />
+                </div>
+            )
+        }
     }
 }
 

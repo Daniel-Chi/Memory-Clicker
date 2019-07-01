@@ -24,7 +24,7 @@ class App extends React.Component {
   };
 
   //function to shuffle images in array
-  randomizeImageOrder() {
+  randomizeImageOrder = () => {
     let randomArray = [];
     //loop through and randomly insert 12 image urls
     for (let i = 0; i < 12; i++) {
@@ -46,25 +46,25 @@ class App extends React.Component {
         return {
           score: (prevState.score + 1),
           highScore: (prevState.score + 1)
-        }
+        };
       } else {
         //don't change high score if new score isn't greater
         return {
           score: (prevState.score + 1)
-        }
+        };
       }
-    })
+    });
   }
 
   //function to change message and rerender affected elements
   handleChangeMessage = (newMessage) => {
-    this.setState({ message: newMessage })
+    this.setState({ message: newMessage });
   }
 
   //function to reset game on win or loss
   handleResetGame = () => {
-    this.setState({ score: 0 })
-      .then(this.handleChangeMessage("Click a Kirby to start again!"))
+    this.handleChangeMessage("Click a Kirby to start again!");
+    this.setState({ score: 0 });
   }
 
   //render all components wrapped in a single div
@@ -87,8 +87,8 @@ class App extends React.Component {
               <Tile
                 key={item}
                 url={item}
-                handleIncreaseScore={this.handleIncreaseScore}
                 handleChangeMessage={this.handleChangeMessage}
+                handleIncreaseScore={this.handleIncreaseScore}
                 handleResetGame={this.handleResetGame}
                 randomizeImageOrder={this.randomizeImageOrder}
               />

@@ -3,7 +3,8 @@
     margin: 2rem;
     border: 6px;
     border-color: crimson;
-    border-style: solid
+    border-style: solid;
+    border-radius: .25rem;
 }
 .kirby-image:hover {
     border-color: lightcoral
