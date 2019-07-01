@@ -1,30 +1,36 @@
 import React from "react";
 import "../assets/css/kirby-image.css"
 
-function Tile (props) {
+class Tile extends React.Component {
+
+    //store whether or not the image has already been clicked
+    state = {
+        clicked: false
+    }
 
     //function that handles correct guess
-    const handleCorrectGuess = () => {
-        props.handleChangeMessage("Great!");
-        props.handleIncreaseScore();
-        props.setClickedByUrl(props.url);
+    handleCorrectGuess = () => {
+        this.setState({ clicked: true });
+        this.props.handleChangeMessage("Great!");
+        this.props.handleIncreaseScore();
     }
 
     //function that handles incorrect guess
-    const handleIncorrectGuess = () => {
+    handleIncorrectGuess = () => {
         alert("Game Over!")
-        props.handleResetGame();
+        this.props.handleResetGame();
     }
 
+    render() {
         //check for incorrect answer, already clicked
-        if (props.clicked) {
+        if (this.state.clicked) {
             return (
                 <div className="col-lg-3 col-md-4">
                         <img
-                            src={props.url}
+                            src={this.props.url}
                             alt="Kirby"
                             className="kirby-image"
-                            onClick={handleIncorrectGuess}
+                            onClick={this.handleIncorrectGuess}
                         />
                 </div>
             )
@@ -33,14 +39,15 @@ function Tile (props) {
             return (
                 <div className="col-lg-3 col-md-4">
                         <img
-                            src={props.url}
+                            src={this.props.url}
                             alt="Kirby"
                             className="kirby-image"
-                            onClick={handleCorrectGuess}
+                            onClick={this.handleCorrectGuess}
                         />
                 </div>
             )
         }
+    }
 }
 
 export default Tile;

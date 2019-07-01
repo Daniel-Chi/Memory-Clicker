@@ -28,6 +28,7 @@ class App extends React.Component {
         }
       })
     });
+    //shuffle the array
     this.setState(prevState => {
       return { images: this.shuffleArray(prevState.images) }
     });
@@ -58,6 +59,7 @@ class App extends React.Component {
           return {
             //reset score
             score: 0,
+            highScore: (prevState.score + 1),
             //reset clicked values to false
             images: this.resetClickedToFalse(prevState.images)
           }
@@ -75,9 +77,31 @@ class App extends React.Component {
         };
       }
     });
+    //shuffle images
     this.setState(prevState => {
       return { images: this.shuffleArray(prevState.images) }
     });
+  }
+
+  //function to set clicked=true for single clicked image in images array
+  //identify clicked image by url in props
+  setClickedByUrl = (url) => {
+    this.setState(prevState => {
+      //find the index of the matched url in the images array
+      const i = prevState.images.findIndex(item => item.url === url);
+      //set clicked to true
+      const targetImage = Object.assign({}, prevState.images[i]);
+      targetImage.clicked = true;
+      //store a new array with the adjusted element replaced
+      const adjustedImagesArray = prevState.images.map((item, index) => {
+        if (index === i) {
+          return targetImage;
+        } else {
+          return item;
+        }
+      })
+      return {images: adjustedImagesArray};
+    })
   }
 
   //function to change message and rerender affected elements
@@ -132,10 +156,12 @@ class App extends React.Component {
               <Tile
                 key={item.url}
                 url={item.url}
+                clicked={item.clicked}
                 handleChangeMessage={this.handleChangeMessage}
                 handleIncreaseScore={this.handleIncreaseScore}
                 handleResetGame={this.handleResetGame}
                 shuffleArray={this.shuffleArray}
+                setClickedByUrl={this.setClickedByUrl}
               />
             ))}
         </GameContainer>
