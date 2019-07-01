@@ -59,7 +59,7 @@ class App extends React.Component {
             //reset score
             score: 0,
             //reset clicked values to false
-            images: this.resetClickedToFalse(this.state.images)
+            images: this.resetClickedToFalse(prevState.images)
           }
           //regular score increase if not complete victory yet
         } else {
@@ -88,13 +88,14 @@ class App extends React.Component {
   //function to reset game on win or loss
   handleResetGame = () => {
     this.handleChangeMessage("Click a Kirby to start again!");
-    //reset score and clicked values
-    this.setState({
-      score: 0,
-      //reset all click values to false
-      images: this.resetClickedToFalse(this.state.images)
-      //shuffle all images
+    this.setState(prevState => {
+      return {
+        score: 0,
+        //reset all click values to false
+        images: this.resetClickedToFalse(prevState.images)
+      }
     });
+    //shuffle all images
     this.setState(prevState => {
       return { images: this.shuffleArray(prevState.images) }
     });
@@ -102,9 +103,9 @@ class App extends React.Component {
 
   //function to return array with reset clicked property of objects
   resetClickedToFalse = (arr) => {
-    arr.map(
+    return arr.map(
       item => {
-        const resetItem = Object.assign({}, item);
+        let resetItem = Object.assign({}, item);
         resetItem.clicked = false;
         return resetItem;
       }

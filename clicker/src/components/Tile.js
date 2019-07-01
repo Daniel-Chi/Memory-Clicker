@@ -17,7 +17,7 @@ class Tile extends React.Component {
 
     //function that handles incorrect guess
     handleIncorrectGuess = () => {
-        alert("Game Over!");
+        alert("Game Over!")
         this.props.handleResetGame();
     }
 
